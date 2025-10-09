@@ -1,6 +1,5 @@
 package com.deepknow.goodface.portal.controller;
 
-import com.deepknow.goodface.portal.controller.common.ApiResponse;
 import com.deepknow.goodface.portal.controller.request.SendCodeRequest;
 import com.deepknow.goodface.portal.gateway.UserAuthGateway;
 import com.deepknow.goodface.user.api.dto.CodeResponse;
@@ -17,19 +16,17 @@ public class UserAuthController {
     private UserAuthGateway userAuthGateway;
 
     @PostMapping("/sms/code")
-    public ApiResponse<CodeResponse> sendSmsCode(@RequestBody SendCodeRequest request) {
-        CodeResponse response = userAuthGateway.sendSmsCode(request.getPhone());
-        return ApiResponse.success(response);
+    public CodeResponse sendSmsCode(@RequestBody SendCodeRequest request) {
+        return userAuthGateway.sendSmsCode(request.getPhone());
     }
 
     @PostMapping("/loginByCode")
-    public ApiResponse<LoginResponse> loginByCode(@RequestBody LoginByCodeRequest request) {
-        LoginResponse response = userAuthGateway.loginByCode(request);
-        return ApiResponse.success(response);
+    public LoginResponse loginByCode(@RequestBody LoginByCodeRequest request) {
+        return userAuthGateway.loginByCode(request);
     }
 
     @PostMapping("/guest/login")
-    public ApiResponse<LoginResponse> guestLogin() {
+    public LoginResponse guestLogin() {
         // 生成访客登录信息
         LoginResponse response = new LoginResponse();
         response.setSuccess(true);
@@ -38,6 +35,8 @@ public class UserAuthController {
         response.setEmail("guest@example.com");
         response.setMembership("访客");
         response.setBalance("0.00");
-        return ApiResponse.success(response);
+        return response;
     }
+
+
 }

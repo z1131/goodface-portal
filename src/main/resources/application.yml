@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8001}
 
 spring:
   application:
@@ -17,8 +17,11 @@ spring:
 dubbo:
   application:
     name: goodface-portal
+    qos-enable: true
+    qos-port: 22224
   protocol:
     name: dubbo
+    port: 20880
   registry:
     address: ${DUBBO_REGISTRY_ADDRESS:nacos://127.0.0.1:8848}
     check: false

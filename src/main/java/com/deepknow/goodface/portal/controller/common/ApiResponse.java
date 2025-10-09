@@ -1,6 +1,9 @@
 package com.deepknow.goodface.portal.controller.common;
 
-public class ApiResponse<T> {
+import java.io.Serializable;
+
+public class ApiResponse<T> implements Serializable {
+    private static final long serialVersionUID = 5452481903363231530L;
     private Integer code;
     private String message;
     private T data;
