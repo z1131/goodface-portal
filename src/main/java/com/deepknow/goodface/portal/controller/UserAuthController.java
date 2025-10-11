@@ -30,11 +30,13 @@ public class UserAuthController {
         // 生成访客登录信息
         LoginResponse response = new LoginResponse();
         response.setSuccess(true);
-        response.setToken("guest-" + java.util.UUID.randomUUID().toString());
+        // 访客不下发 token，避免前端误判为已登录
+        response.setToken(null);
         response.setUsername("访客用户");
         response.setEmail("guest@example.com");
         response.setMembership("访客");
         response.setBalance("0.00");
+        response.setGuest(true);
         return response;
     }
 
