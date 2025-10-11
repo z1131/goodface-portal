@@ -66,6 +66,12 @@
             <artifactId>goodface-user-api</artifactId>
             <version>1.1.1</version>
         </dependency>
+        <!-- Interview API types used by portal gateway -->
+        <dependency>
+            <groupId>com.deepknow.goodface.interview</groupId>
+            <artifactId>interview-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
