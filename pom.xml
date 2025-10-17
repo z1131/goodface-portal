@@ -35,10 +35,10 @@
     </dependencyManagement>
 
     <repositories>
-        <!-- GitHub Packages requires OWNER/REPOSITORY in the URL; use a single server id 'github' -->
+        <!-- GitHub Packages requires OWNER/REPOSITORY in the URL; IDs must be unique and will match settings.xml servers -->
         <repository>
-            <id>github</id>
-            <name>GitHub Packages (goodface-user)</name>
+            <id>github-z1131-goodface-user</id>
+            <name>GitHub Packages (z1131/goodface-user)</name>
             <url>https://maven.pkg.github.com/z1131/goodface-user</url>
             <releases>
                 <enabled>true</enabled>
@@ -48,8 +48,8 @@
             </snapshots>
         </repository>
         <repository>
-            <id>github</id>
-            <name>GitHub Packages (goodface-interview)</name>
+            <id>github-z1131-goodface-interview</id>
+            <name>GitHub Packages (z1131/goodface-interview)</name>
             <url>https://maven.pkg.github.com/z1131/goodface-interview</url>
             <releases>
                 <enabled>true</enabled>
