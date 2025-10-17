@@ -38,7 +38,7 @@
         <repository>
             <id>github-goodface-user</id>
             <name>GitHub Packages for goodface-user</name>
-            <url>https://maven.pkg.github.com/deepknow/goodface-user</url>
+            <url>https://maven.pkg.github.com/goodface-user</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -46,7 +46,7 @@
         <repository>
             <id>github-goodface-interview</id>
             <name>GitHub Packages for goodface-interview</name>
-            <url>https://maven.pkg.github.com/deepknow/goodface-interview</url>
+            <url>https://maven.pkg.github.com/goodface-interview</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
