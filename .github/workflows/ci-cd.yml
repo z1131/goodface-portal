@@ -73,11 +73,11 @@ jobs:
       - name: Deploy to ECS
         run: |
           scp -o StrictHostKeyChecking=no deploy/docker-compose.yml ${{ secrets.ECS_USER }}@${{ secrets.ECS_HOST }}:/opt/goodface-portal/
-          ssh -o StrictHostKeyChecking=no ${{ secrets.ECS_USER }}@${{ secrets.ECS_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.ECS_USER }}@${{ secrets.ECS_HOST }} << EOF
             cd /opt/goodface-portal
             export ACR_REGISTRY=${{ secrets.ACR_REGISTRY }}
             export ACR_NAMESPACE=${{ secrets.ACR_NAMESPACE }}
-            export IMAGE_TAG=$(echo $GITHUB_SHA | cut -c1-7)
+            export IMAGE_TAG=${GITHUB_SHA::7}
             export SPRING_PROFILES_ACTIVE=prod
             export SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
             export SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
