@@ -34,6 +34,33 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <id>github-goodface-user</id>
+            <name>GitHub Packages for goodface-user</name>
+            <url>https://maven.pkg.github.com/deepknow/goodface-user</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>github-goodface-interview</id>
+            <name>GitHub Packages for goodface-interview</name>
+            <url>https://maven.pkg.github.com/deepknow/goodface-interview</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/deepknow/goodface-portal</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
