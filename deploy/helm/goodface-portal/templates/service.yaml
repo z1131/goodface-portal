@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "goodface-portal.fullname" . }}
+  labels:
+    {{- include "goodface-portal.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 20881
+      targetPort: dubbo
+      protocol: TCP
+      name: dubbo
+    - port: 22221
+      targetPort: qos
+      protocol: TCP
+      name: qos
+  selector:
+    {{- include "goodface-portal.selectorLabels" . | nindent 4 }}

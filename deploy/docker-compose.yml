@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  goodface-portal:
+    image: ${ACR_REGISTRY}/${ACR_NAMESPACE}/goodface-portal:${IMAGE_TAG}
+    container_name: goodface-portal
+    restart: always
+    ports:
+      - "8001:8001"
+      - "20881:20881"
+      - "22221:22221"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_REDIS_HOST: ${SPRING_REDIS_HOST}
+      SPRING_REDIS_PORT: ${SPRING_REDIS_PORT}
+      DUBBO_REGISTRY_ADDRESS: ${DUBBO_REGISTRY_ADDRESS}
+    # 按需挂载日志或配置
+    volumes:
+      - ./logs:/app/logs
