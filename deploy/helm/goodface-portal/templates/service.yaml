@@ -11,11 +11,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: 20881
+    - port: 20880
       targetPort: dubbo
       protocol: TCP
       name: dubbo
-    - port: 22221
+    - port: 22224
       targetPort: qos
       protocol: TCP
       name: qos

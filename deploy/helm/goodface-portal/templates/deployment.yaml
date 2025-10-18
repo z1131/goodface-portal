@@ -23,10 +23,10 @@ spec:
               containerPort: 8001
               protocol: TCP
             - name: dubbo
-              containerPort: 20881
+              containerPort: 20880
               protocol: TCP
             - name: qos
-              containerPort: 22221
+              containerPort: 22224
               protocol: TCP
           env:
             - name: SPRING_PROFILES_ACTIVE

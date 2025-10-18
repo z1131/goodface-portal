@@ -13,7 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/interview")
 public class InterviewModelController {
-    @DubboReference(url = "dubbo://198.18.0.1:20882", check = false)
+    // 改为基于注册中心的标准引用，移除直连 URL
+    @DubboReference(check = false)
     private ModelCatalogService modelCatalogService;
 
     @GetMapping("/models")
