@@ -38,24 +38,8 @@ public class InterviewSessionController {
 
         Map<String, Object> data = new HashMap<>();
         data.put("sessionId", sessionId);
-        // 依据请求信息动态构造 WebSocket 地址，支持反向代理与 HTTPS
-        String forwardedProto = request.getHeader("X-Forwarded-Proto");
-        String httpScheme = forwardedProto != null ? forwardedProto : request.getScheme();
-        String wsScheme = "https".equalsIgnoreCase(httpScheme) ? "wss" : "ws";
-
-        String forwardedHost = request.getHeader("X-Forwarded-Host");
-        String host = forwardedHost != null ? forwardedHost : request.getServerName();
-
-        String forwardedPort = request.getHeader("X-Forwarded-Port");
-        int port;
-        try {
-            port = forwardedPort != null ? Integer.parseInt(forwardedPort) : request.getServerPort();
-        } catch (Exception ignored) {
-            port = request.getServerPort();
-        }
-        boolean defaultPort = ("http".equalsIgnoreCase(httpScheme) && port == 80) || ("https".equalsIgnoreCase(httpScheme) && port == 443);
-        String wsUrl = wsScheme + "://" + host + (defaultPort ? "" : ":" + port) + "/ws/interview/audio/stream?sessionId=" + sessionId;
-        data.put("wsUrl", wsUrl);
+        // 统一返回相对路径，交由前端所在域的 Nginx /ws 反向代理到门户
+        data.put("wsUrl", "/ws/interview/audio/stream?sessionId=" + sessionId);
         return ApiResponse.success(data);
     }
 }
