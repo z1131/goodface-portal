@@ -74,7 +74,9 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no deploy/docker-compose.yml ${{ secrets.ECS_USER }}@${{ secrets.ECS_HOST }}:/opt/goodface-portal/
           ssh -o StrictHostKeyChecking=no ${{ secrets.ECS_USER }}@${{ secrets.ECS_HOST }} << EOF
+            set -e
             cd /opt/goodface-portal
+            # Export runtime config from Secrets
             export ACR_REGISTRY=${{ secrets.ACR_REGISTRY }}
             export ACR_NAMESPACE=${{ secrets.ACR_NAMESPACE }}
             export IMAGE_TAG=${GITHUB_SHA::7}
@@ -85,6 +87,15 @@ jobs:
             export SPRING_REDIS_HOST=${{ secrets.SPRING_REDIS_HOST }}
             export SPRING_REDIS_PORT=${{ secrets.SPRING_REDIS_PORT }}
             export DUBBO_REGISTRY_ADDRESS=${{ secrets.DUBBO_REGISTRY_ADDRESS }}
+
+            # Login to ACR on ECS to pull private images
+            echo "${{ secrets.ACR_PASSWORD }}" | docker login "${{ secrets.ACR_REGISTRY }}" -u "${{ secrets.ACR_USERNAME }}" --password-stdin
+
+            # Pull and start latest image
             docker compose pull
             docker compose up -d --remove-orphans
+
+            # Ensure unified network exists and attach portal container
+            docker network ls | grep -q goodface-net || docker network create goodface-net
+            docker network connect goodface-net goodface-portal || true
           EOF
