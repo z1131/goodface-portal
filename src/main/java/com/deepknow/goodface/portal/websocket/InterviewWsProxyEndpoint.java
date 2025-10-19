@@ -38,8 +38,11 @@ public class InterviewWsProxyEndpoint {
         parseQueryParams(query);
         String sessionId = queryParams.getOrDefault("sessionId", "sess_" + System.currentTimeMillis());
 
-        // 连接到 interview 的真实 WS 端点
-        String remoteUrl = "ws://127.0.0.1:8003/audio/stream?sessionId=" + sessionId;
+        // 连接到 interview 的真实 WS 端点：改为可配置的目标，默认使用容器名与端口
+        String host = System.getenv().getOrDefault("INTERVIEW_WS_HOST", "goodface-interview");
+        String port = System.getenv().getOrDefault("INTERVIEW_WS_PORT", "8003");
+        String scheme = System.getenv().getOrDefault("INTERVIEW_WS_SCHEME", "ws");
+        String remoteUrl = scheme + "://" + host + ":" + port + "/audio/stream?sessionId=" + sessionId;
         HttpClient httpClient = HttpClient.newHttpClient();
         CompletableFuture<WebSocket> future = httpClient.newWebSocketBuilder()
                 .buildAsync(URI.create(remoteUrl), new WebSocket.Listener() {
@@ -81,15 +84,8 @@ public class InterviewWsProxyEndpoint {
                         log.warn("Proxy remote error: {}", error.getMessage(), error);
                         safeCloseClient(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Remote error"));
                     }
-
-                    @Override
-                    public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
-                        log.info("Proxy remote closed: {} - {}", statusCode, reason);
-                        safeCloseClient(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "Remote closed"));
-                        return CompletableFuture.completedFuture(null);
-                    }
                 });
-
+        // 可按需保存 future/remote，在 onMessage 时使用
         future.whenComplete((ws, throwable) -> {
             if (throwable != null) {
                 log.error("Failed to connect remote interview WS: {}", throwable.getMessage(), throwable);

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/interview")
 public class InterviewSessionController {
@@ -21,7 +23,7 @@ public class InterviewSessionController {
     private InterviewSessionGateway interviewSessionGateway;
 
     @PostMapping(value = "/session", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse<Map<String, Object>> createSession(@RequestBody(required = false) CreateInterviewSessionRequest body) {
+    public ApiResponse<Map<String, Object>> createSession(@RequestBody(required = false) CreateInterviewSessionRequest body, HttpServletRequest request) {
         String sessionId = "sess_" + System.currentTimeMillis();
         String userId = body != null ? body.getUserId() : null;
         Map<String, Object> config = body != null ? body.getConfig() : null;
@@ -36,8 +38,24 @@ public class InterviewSessionController {
 
         Map<String, Object> data = new HashMap<>();
         data.put("sessionId", sessionId);
-        // 通过 portal 的 WS 代理端点转发到 interview 的 /audio/stream
-        data.put("wsUrl", "ws://127.0.0.1:8001/ws/interview/audio/stream?sessionId=" + sessionId);
+        // 依据请求信息动态构造 WebSocket 地址，支持反向代理与 HTTPS
+        String forwardedProto = request.getHeader("X-Forwarded-Proto");
+        String httpScheme = forwardedProto != null ? forwardedProto : request.getScheme();
+        String wsScheme = "https".equalsIgnoreCase(httpScheme) ? "wss" : "ws";
+
+        String forwardedHost = request.getHeader("X-Forwarded-Host");
+        String host = forwardedHost != null ? forwardedHost : request.getServerName();
+
+        String forwardedPort = request.getHeader("X-Forwarded-Port");
+        int port;
+        try {
+            port = forwardedPort != null ? Integer.parseInt(forwardedPort) : request.getServerPort();
+        } catch (Exception ignored) {
+            port = request.getServerPort();
+        }
+        boolean defaultPort = ("http".equalsIgnoreCase(httpScheme) && port == 80) || ("https".equalsIgnoreCase(httpScheme) && port == 443);
+        String wsUrl = wsScheme + "://" + host + (defaultPort ? "" : ":" + port) + "/ws/interview/audio/stream?sessionId=" + sessionId;
+        data.put("wsUrl", wsUrl);
         return ApiResponse.success(data);
     }
 }
