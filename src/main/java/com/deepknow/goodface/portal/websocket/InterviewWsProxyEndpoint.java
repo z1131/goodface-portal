@@ -109,12 +109,24 @@ public class InterviewWsProxyEndpoint {
 
     @OnMessage
     public void onTextMessage(String text) {
-        if (remote != null && remoteOpen.get()) {
-            try {
-                remote.sendText(text, true);
-            } catch (Exception e) {
-                log.warn("Proxy send text to remote failed: {}", e.getMessage());
+        try {
+            // 解析消息，检查是否为心跳ping
+            if (text.contains("\"type\":\"ping\"")) {
+                // 直接响应pong给前端，不转发到interview服务
+                if (clientSession != null && clientSession.isOpen()) {
+                    String pongResponse = "{\"type\":\"pong\",\"timestamp\":" + System.currentTimeMillis() + "}";
+                    clientSession.getAsyncRemote().sendText(pongResponse);
+                    log.debug("Responded to heartbeat ping");
+                }
+                return;
             }
+            
+            // 非心跳消息转发到interview服务
+            if (remote != null && remoteOpen.get()) {
+                remote.sendText(text, true);
+            }
+        } catch (Exception e) {
+            log.warn("Proxy send text to remote failed: {}", e.getMessage());
         }
     }
 
