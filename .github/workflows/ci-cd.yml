@@ -116,6 +116,20 @@ jobs:
             echo "NACOS_USERNAME=${{ secrets.NACOS_USERNAME }}" >> .env
             echo "NACOS_PASSWORD=${{ secrets.NACOS_PASSWORD }}" >> .env
 
+            # Test network connectivity to Nacos
+            echo "🔍 Testing connectivity to Nacos..."
+            NACOS_HOST=$(echo "${{ secrets.DUBBO_REGISTRY_ADDRESS }}" | sed 's/nacos:\/\///' | cut -d':' -f1)
+            NACOS_PORT=$(echo "${{ secrets.DUBBO_REGISTRY_ADDRESS }}" | sed 's/nacos:\/\///' | cut -d':' -f2)
+            echo "Connecting to Nacos at: $NACOS_HOST:$NACOS_PORT"
+
+            if timeout 10 bash -c "</dev/tcp/$NACOS_HOST/$NACOS_PORT"; then
+                echo "✅ Nacos is reachable at $NACOS_HOST:$NACOS_PORT"
+            else
+                echo "❌ Cannot reach Nacos at $NACOS_HOST:$NACOS_PORT"
+                echo "Please check the DUBBO_REGISTRY_ADDRESS in GitHub Secrets"
+                exit 1
+            fi
+
             # Try to pull the specific image tag, fallback to latest if not found
             if ! docker compose --env-file .env pull; then
               echo "⚠️  Failed to pull image ${{ github.sha }}, falling back to latest"
@@ -183,6 +197,20 @@ jobs:
             echo "DUBBO_REGISTRY_NAMESPACE=${{ secrets.DUBBO_REGISTRY_NAMESPACE }}" >> .env
             echo "NACOS_USERNAME=${{ secrets.NACOS_USERNAME }}" >> .env
             echo "NACOS_PASSWORD=${{ secrets.NACOS_PASSWORD }}" >> .env
+
+            # Test network connectivity to Nacos
+            echo "🔍 Testing connectivity to Nacos..."
+            NACOS_HOST=$(echo "${{ secrets.DUBBO_REGISTRY_ADDRESS }}" | sed 's/nacos:\/\///' | cut -d':' -f1)
+            NACOS_PORT=$(echo "${{ secrets.DUBBO_REGISTRY_ADDRESS }}" | sed 's/nacos:\/\///' | cut -d':' -f2)
+            echo "Connecting to Nacos at: $NACOS_HOST:$NACOS_PORT"
+
+            if timeout 10 bash -c "</dev/tcp/$NACOS_HOST/$NACOS_PORT"; then
+                echo "✅ Nacos is reachable at $NACOS_HOST:$NACOS_PORT"
+            else
+                echo "❌ Cannot reach Nacos at $NACOS_HOST:$NACOS_PORT"
+                echo "Please check the DUBBO_REGISTRY_ADDRESS in GitHub Secrets"
+                exit 1
+            fi
 
             # Try to pull the specific image tag, fallback to latest if not found
             if ! docker compose --env-file .env pull; then
