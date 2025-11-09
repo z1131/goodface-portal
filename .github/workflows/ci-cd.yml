@@ -110,6 +110,7 @@ jobs:
             echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> .env
             echo "SPRING_REDIS_HOST=${{ secrets.SPRING_REDIS_HOST }}" >> .env
             echo "SPRING_REDIS_PORT=${{ secrets.SPRING_REDIS_PORT }}" >> .env
+            echo "SPRING_REDIS_USERNAME=${{ secrets.SPRING_REDIS_USERNAME }}" >> .env
             echo "SPRING_REDIS_PASSWORD=${{ secrets.SPRING_REDIS_PASSWORD }}" >> .env
             echo "DUBBO_REGISTRY_ADDRESS=${{ secrets.DUBBO_REGISTRY_ADDRESS }}" >> .env
             echo "DUBBO_REGISTRY_NAMESPACE=${{ secrets.DUBBO_REGISTRY_NAMESPACE }}" >> .env
@@ -192,6 +193,7 @@ jobs:
             echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> .env
             echo "SPRING_REDIS_HOST=${{ secrets.SPRING_REDIS_HOST }}" >> .env
             echo "SPRING_REDIS_PORT=${{ secrets.SPRING_REDIS_PORT }}" >> .env
+            echo "SPRING_REDIS_USERNAME=${{ secrets.SPRING_REDIS_USERNAME }}" >> .env
             echo "SPRING_REDIS_PASSWORD=${{ secrets.SPRING_REDIS_PASSWORD }}" >> .env
             echo "DUBBO_REGISTRY_ADDRESS=${{ secrets.DUBBO_REGISTRY_ADDRESS }}" >> .env
             echo "DUBBO_REGISTRY_NAMESPACE=${{ secrets.DUBBO_REGISTRY_NAMESPACE }}" >> .env
