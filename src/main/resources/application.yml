@@ -20,6 +20,7 @@ spring:
   redis:
     host: ${SPRING_REDIS_HOST:r-bp1vv94ogy8k2a1e5j.redis.rds.aliyuncs.com}
     port: ${SPRING_REDIS_PORT:6379}
+    username: ${SPRING_REDIS_USERNAME:}
     password: ${SPRING_REDIS_PASSWORD:}
     timeout: 5000ms
     lettuce:
